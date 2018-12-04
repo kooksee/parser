@@ -25,24 +25,29 @@ func Start(debug bool, port string) error {
 		gin.SetMode(gin.ReleaseMode)
 	}
 	router := gin.Default()
+	router.GET("/", func(c *gin.Context) {
+		c.String(http.StatusOK, "ok", )
+		return
+	})
+
 	router.GET("/health", func(c *gin.Context) {
-		c.String(http.StatusOK, "", "ok")
+		c.String(http.StatusOK, "ok")
 		return
 	})
 
 	router.POST("/check", func(c *gin.Context) {
 		dt, err := c.GetRawData()
 		if err != nil {
-			c.String(http.StatusBadRequest, "", err.Error())
+			c.String(http.StatusBadRequest, err.Error())
 			return
 		}
 
 		if _, e := graphquery.Compile(dt); e != nil {
-			c.String(http.StatusBadRequest, "", err.Error())
+			c.String(http.StatusBadRequest, e.Error())
 			return
 		}
 
-		c.String(http.StatusOK, "", "ok")
+		c.String(http.StatusOK, "ok")
 		return
 	})
 
